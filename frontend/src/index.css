@@ -1,0 +1,127 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #1f2937;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 2px solid #d1d5db;
+}
+
+.tabs button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.tabs button[aria-selected='true'] {
+  border-bottom: 3px solid #2563eb;
+  font-weight: 600;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.sort-controls label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sort-button {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sort-button:hover {
+  text-decoration: underline;
+}
+
+/* Forms */
+form {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 400px;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  padding: 0.35rem;
+}
+
+td button {
+  margin-right: 0.25rem;
+}
+
+/* Shared */
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.range-inputs input {
+  width: 7rem;
+}
+
+.with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.error {
+  margin: 0;
+  color: #b91c1c;
+}
+
+.hint {
+  color: #6b7280;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

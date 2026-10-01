@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CreditWorks.VehicleManagement.Api/CreditWorks.VehicleManagement.Api.csproj" />
+    <Project Path="src/CreditWorks.VehicleManagement.Shared/CreditWorks.VehicleManagement.Shared.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/">
+    <Project Path="src/Modules/CreditWorks.VehicleManagement.Modules.Categories/CreditWorks.VehicleManagement.Modules.Categories.csproj" />
+    <Project Path="src/Modules/CreditWorks.VehicleManagement.Modules.Vehicles/CreditWorks.VehicleManagement.Modules.Vehicles.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CreditWorks.VehicleManagement.Tests/CreditWorks.VehicleManagement.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>73e25183-cc74-4fd5-9a82-4b9adddba3dd</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\CreditWorks.VehicleManagement.Modules.Categories\CreditWorks.VehicleManagement.Modules.Categories.csproj" />
+    <ProjectReference Include="..\Modules\CreditWorks.VehicleManagement.Modules.Vehicles\CreditWorks.VehicleManagement.Modules.Vehicles.csproj" />
+    <ProjectReference Include="..\CreditWorks.VehicleManagement.Shared\CreditWorks.VehicleManagement.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

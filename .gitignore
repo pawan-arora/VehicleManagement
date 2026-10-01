@@ -1,0 +1,28 @@
+# .NET build output
+bin/
+obj/
+.vs/
+*.user
+TestResults/
+
+# React: installed packages, production build, test coverage, local-only settings
+node_modules/
+dist/
+coverage/
+*.local
+
+# Logs
+*.log
+
+# Secrets (the database password lives in .NET user secrets, outside the repo)
+.env
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# VS Code: keep only launch.json
+.vscode/*
+!.vscode/launch.json

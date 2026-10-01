@@ -1,0 +1,52 @@
+{
+  // The backend API. All three build automatically and use the "http" profile in
+  // backend/src/CreditWorks.VehicleManagement.Api/Properties/launchSettings.json (port 5080).
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Breakpoints work. Code changes need a restart.
+      "name": "Debug API",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/backend/src/CreditWorks.VehicleManagement.Api/CreditWorks.VehicleManagement.Api.csproj"
+    },
+    {
+      // Runs `dotnet watch` in a terminal: saved changes apply to the running API. Breakpoints don't work.
+      // ("node-terminal" is just VS Code's built-in way to run a command from here; it has nothing to do with Node.)
+      "name": "Hot reload API",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "command": "dotnet watch --project src/CreditWorks.VehicleManagement.Api --launch-profile http",
+      "env": {
+        // Restart by itself after a change Hot Reload can't apply (such as a renamed method), instead of asking.
+        "DOTNET_WATCH_RESTART_ON_RUDE_EDIT": "true"
+      }
+    },
+    {
+      // Runs `dotnet run` in a terminal. No breakpoints, no Hot Reload.
+      "name": "Run API",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "command": "dotnet run --project src/CreditWorks.VehicleManagement.Api --launch-profile http"
+    },
+    {
+      // The React app on http://localhost:5173. Saved changes show in the browser straight away. It forwards
+      // /api requests to the backend (see frontend/vite.config.ts), so start the backend too.
+      "name": "Run frontend",
+      "type": "node-terminal",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/frontend",
+      "command": "npm run dev"
+    }
+  ],
+  "compounds": [
+    {
+      // Starts the backend (with hot reload) and the frontend together; stopping one stops both.
+      "name": "Backend + frontend",
+      "configurations": ["Hot reload API", "Run frontend"],
+      "stopAll": true
+    }
+  ]
+}
