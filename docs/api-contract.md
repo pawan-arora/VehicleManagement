@@ -56,7 +56,7 @@ by id. Each vehicle's `category` is worked out from its weight when the list is 
     "id": 7, "ownerName": "John Smith",
     "manufacturer": { "id": 1, "name": "Mazda" },
     "yearOfManufacture": 2019, "weightKg": 1850.75,
-    "category": { "id": 2, "name": "Medium", "icon": "car" }
+    "category": { "id": 1002, "name": "Medium", "icon": "car" }
 } ]
 ```
 
@@ -71,9 +71,9 @@ or `WeightKg` (required, above 0, at most 2 decimal places).
 ### `GET /api/categories/all`
 Returns the categories ordered by `minWeightKg`.
 ```json
-[ { "id": 1, "name": "Light",  "minWeightKg": 0,    "maxWeightKg": 500,  "icon": "motorcycle" },
-  { "id": 2, "name": "Medium", "minWeightKg": 500,  "maxWeightKg": 2500, "icon": "car" },
-  { "id": 3, "name": "Heavy",  "minWeightKg": 2500, "maxWeightKg": null, "icon": "truck" } ]
+[ { "id": 1001, "name": "Light",  "minWeightKg": 0,    "maxWeightKg": 500,  "icon": "motorcycle" },
+  { "id": 1002, "name": "Medium", "minWeightKg": 500,  "maxWeightKg": 2500, "icon": "car" },
+  { "id": 1003, "name": "Heavy",  "minWeightKg": 2500, "maxWeightKg": null, "icon": "truck" } ]
 ```
 
 Each category also carries `iconSvg`, the icon image as SVG markup (left out above for brevity). It's
@@ -83,7 +83,7 @@ sent here, once per category, and not with every vehicle; a client looks the ima
 Returns the one category a vehicle of that weight belongs to, in the same shape as an item of `GET /api/categories/all`
 (including `iconSvg`). It uses the boundary rule above, so `weightKg=500` returns Medium.
 ```json
-{ "id": 2, "name": "Medium", "minWeightKg": 500, "maxWeightKg": 2500, "icon": "car", "iconSvg": "<svg ...>" }
+{ "id": 1002, "name": "Medium", "minWeightKg": 500, "maxWeightKg": 2500, "icon": "car", "iconSvg": "<svg ...>" }
 ```
 `weightKg` follows the vehicle weight rules; if it's missing, not above 0, or has more than 2 decimal places, the
 response is `400` with `errors.WeightKg`.
