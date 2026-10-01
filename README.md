@@ -8,6 +8,37 @@ manage the categories that each vehicle is placed in automatically by its weight
 - **API contract:** `docs/api-contract.md`, the only thing the two sides share.
 - **AI assistant:** Claude Code (see [Use of AI](#use-of-ai)).
 
+## Quick start
+
+You need the .NET 10 SDK, SQL Server 2019 or later, the EF Core tool (`dotnet tool install --global dotnet-ef`) and
+Node.js 24 LTS. The full steps are in [Running the backend](#running-the-backend).
+
+```bash
+cd backend
+
+# 1. Database connection: nothing to do with LocalDB on Windows. For any other SQL Server, set it once:
+dotnet user-secrets set "ConnectionStrings:VehicleManagement" \
+  "Server=localhost,1433;Database=VehicleManagement;User Id=sa;Password=<your-password>;TrustServerCertificate=True" \
+  --project src/CreditWorks.VehicleManagement.Api
+
+# 2. Create the database and its default data
+scripts/migrations.sh update        # on Windows without Git Bash, see step 3 below
+
+# 3. Run the API (http://localhost:5080)
+dotnet run --project src/CreditWorks.VehicleManagement.Api --launch-profile http
+
+# 4. In a second terminal, from the repository's root folder, run the React app (http://localhost:5173)
+cd frontend
+npm install
+npm run dev
+
+# 5. Run the tests (from backend/)
+dotnet test
+```
+
+Then open **http://localhost:5173**. In VS Code, "Backend + frontend" in the Run and Debug panel does steps 3 and 4
+for you (see [Running in VS Code](#running-in-vs-code)).
+
 ## Screenshots
 
 **Vehicles tab:** the vehicle list with each vehicle's category and icon, sortable by any column (the sorted column
@@ -125,8 +156,17 @@ is missing, the API stops at startup with a message saying so.
 
 ### 3. Create the database
 
-This creates the database and its tables, and adds the starting data: the five manufacturers, the default
-categories (Light 0–500 kg, Medium 500–2500 kg, Heavy 2500 kg and above) and the icons.
+This creates the database and its tables, and adds the default data:
+
+| Data | Default values |
+|---|---|
+| Manufacturers | Mazda, Mercedes, Honda, Ferrari, Toyota |
+| Categories | Light (0 to 500 kg, motorcycle icon), Medium (500 to 2500 kg, car icon), Heavy (2500 kg and above, truck icon) |
+| Icons | bicycle, motorcycle, car, van, truck, bus, tractor |
+| Vehicles | None: the list starts empty, and vehicles are added through the app |
+
+The default data is added once, when the database is created. After that, categories can be changed in the app,
+and running the migrations again doesn't reset them.
 
 **Linux, macOS or Git Bash on Windows:**
 ```bash
@@ -152,6 +192,13 @@ The API listens on **http://localhost:5080**. To check it's working:
 ```bash
 curl http://localhost:5080/api/categories/all
 ```
+
+To have code changes apply without restarting (hot reload), run it with `dotnet watch` instead:
+```bash
+dotnet watch --project src/CreditWorks.VehicleManagement.Api --launch-profile http
+```
+
+In VS Code, you can also start it from the Run and Debug panel (see [Running in VS Code](#running-in-vs-code)).
 
 The endpoints and their JSON are listed in `docs/api-contract.md`.
 
@@ -189,8 +236,29 @@ npm run dev
 
 Open **http://localhost:5173**. See `frontend/README.md` for the frontend's structure.
 
-**In VS Code**, the Run and Debug panel has **"Backend + frontend"**, which starts both, and separate options for
-debugging or running the API on its own.
+## Running in VS Code
+
+Open the repository's root folder (`VehicleManagement`) in VS Code, with the **C# Dev Kit** extension installed. The
+**Run and Debug** panel (Ctrl+Shift+D) lists these options, defined in `.vscode/launch.json`. Pick one and press
+**F5**:
+
+| Option | What it does |
+|---|---|
+| **Backend + frontend** | Starts the API with hot reload and the React app together; stopping one stops both. The easiest way to run everything |
+| **Debug API** | Starts the API with the debugger attached, so breakpoints work. Restart it after code changes |
+| **Hot reload API** | Starts the API with `dotnet watch`: saved changes apply to the running API. Breakpoints don't work |
+| **Run API** | Starts the API with `dotnet run`, without debugging or hot reload |
+| **Run frontend** | Starts the React app on http://localhost:5173 (the API must be running too) |
+
+Every option builds the code first, and the API uses port 5080 (from `launchSettings.json`). The database connection
+and migrations are still needed first (steps 2 and 3 above).
+
+On Linux, if hot reload stops with *"The configured user limit (128) on the number of inotify instances has been
+reached"*, raise the limit once:
+```bash
+echo 'fs.inotify.max_user_instances=512' | sudo tee /etc/sysctl.d/60-inotify.conf
+sudo sysctl --system
+```
 
 ## API
 
