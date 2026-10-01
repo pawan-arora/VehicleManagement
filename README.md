@@ -7,6 +7,8 @@ manage the categories that each vehicle is placed in automatically by its weight
 - **Frontend:** React + TypeScript (Vite). In `frontend/`.
 - **API contract:** `docs/api-contract.md`, the only thing the two sides share.
 - **AI assistant:** Claude Code (see [Use of AI](#use-of-ai)).
+- **Built on:** Linux (Linux Mint 22.3), with SQL Server 2022 running in Docker, VS Code, .NET 10 and Node.js 24. The
+  setup steps also cover Windows (LocalDB and the `dotnet ef` commands), but I developed and tested it on Linux.
 
 ## Quick start
 
@@ -21,7 +23,7 @@ dotnet user-secrets set "ConnectionStrings:VehicleManagement" \
   "Server=localhost,1433;Database=VehicleManagement;User Id=sa;Password=<your-password>;TrustServerCertificate=True" \
   --project src/CreditWorks.VehicleManagement.Api
 
-# 2. Create the database and its default data
+# 2. Create the VehicleManagement database, its tables and default data (no need to create it yourself)
 scripts/migrations.sh update        # on Windows without Git Bash, see step 3 below
 
 # 3. Run the API (http://localhost:5080)
@@ -132,6 +134,10 @@ All backend commands run from the `backend/` folder.
 The API reads one setting, the connection string named `VehicleManagement`. No password is committed to the
 repository.
 
+The database itself is called **`VehicleManagement`** (the `Database=VehicleManagement` part of the connection
+string). **You don't need to create it**: step 3 creates it, with its tables and default data. To use a different
+name, change `Database=` in your connection string before step 3.
+
 **Windows with LocalDB** (installed with Visual Studio): nothing to configure. The default in
 `src/CreditWorks.VehicleManagement.Api/appsettings.Development.json` points at `(localdb)\MSSQLLocalDB` with Windows
 authentication.
@@ -156,7 +162,7 @@ is missing, the API stops at startup with a message saying so.
 
 ### 3. Create the database
 
-This creates the database and its tables, and adds the default data:
+This creates the `VehicleManagement` database (if it doesn't exist yet) and its tables, and adds the default data:
 
 | Data | Default values |
 |---|---|
@@ -252,13 +258,6 @@ Open the repository's root folder (`VehicleManagement`) in VS Code, with the **C
 
 Every option builds the code first, and the API uses port 5080 (from `launchSettings.json`). The database connection
 and migrations are still needed first (steps 2 and 3 above).
-
-On Linux, if hot reload stops with *"The configured user limit (128) on the number of inotify instances has been
-reached"*, raise the limit once:
-```bash
-echo 'fs.inotify.max_user_instances=512' | sudo tee /etc/sysctl.d/60-inotify.conf
-sudo sysctl --system
-```
 
 ## API
 
