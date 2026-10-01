@@ -283,35 +283,15 @@ details.
 
 ## Testing
 
-The tests use **xUnit** and focus on the two services, **`CategoryService`** and **`VehicleService`**. That's where
-every business rule is applied and the result is saved, so testing them covers the rules the way the application
-really uses them. Following the brief, there are no tests for trivial details: each test checks behaviour where a
-bug would give users wrong results, such as a vehicle in the wrong category or a gap between categories.
+The tests (xUnit) cover the two services, `CategoryService` and `VehicleService`, because that's where every business
+rule is applied and saved. They check category determination, boundary values (500.00 kg is Medium), gaps and
+overlaps, category changes applying to existing vehicles, vehicle validation and sorting. Every rejected change is
+also checked to save nothing.
 
-| What the brief asks to test | Covered by |
-|---|---|
-| Correct category determination | `CategoryServiceTests.FindByWeight_ReturnsTheCorrectCategory`, `VehicleServiceTests.Add_ValidVehicle_…` |
-| Category boundary values | `FindByWeight_ReturnsTheCorrectCategory`: 0, 499.99, **500.00** (Medium), 2499.99, 2500 |
-| Prevention of overlapping ranges | `Add_AcrossTwoCategories_IsRejected…`, `Update_ThatSwallowsANeighbour_IsRejected…` |
-| Prevention of gaps between ranges | `Add_InTheMiddleOfACategory_IsRejected…`, `Update_MovingTheLightestAwayFromZero_IsRejected…`, the `Delete_…` tests |
-| Category changes affecting existing vehicles | `Update_ChangingARange_MovesTheNeighbour_SoVehiclesChangeCategory`, `VehicleServiceTests.GetAll_ShowsTheCurrentCategory_…` |
-| Vehicle validation | `VehicleServiceTests.Add_…`: required fields, unknown manufacturer, year from 1886 to next year, invalid weight; `CategoryServiceTests.CheckWeight_…` |
-| Sorting | `VehicleServiceTests.GetAll_ReturnsTheVehiclesInTheRequestedOrder` |
-
-Every test of a rejected change also checks that **nothing was saved**, so an invalid category configuration or
-vehicle can never reach the database.
-
-**How the tests run without SQL Server**
-
-- `CategoryServiceTests` use EF Core's **in-memory database**, a fresh one per test, seeded with the default
-  categories (Light, Medium, Heavy).
-- `VehicleServiceTests` replace the Categories module (`ICategoryResolver`) with a **Moq** mock, so each test controls
-  what it answers (for example, "this weight is invalid" or "this weight is now Heavy"), and check how
-  `VehicleService` reacts. They also use an in-memory database.
-
-**Not covered:** these are unit tests; there are no integration tests against a real SQL Server, and the frontend has
-no automated tests (the backend is the authority for every rule). With more time, I'd add a few integration tests
-that run the real API against a real database.
+They need no SQL Server: they use EF Core's in-memory database. `VehicleService` asks the Categories module whether a
+weight is valid and which category it belongs to, so `VehicleServiceTests` give it a **Moq** mock that answers instead.
+That way they test only the vehicle behaviour, and can control the answers (for example, "this weight is now Heavy").
+There are no integration tests or frontend tests.
 
 ## Vehicle rules
 
